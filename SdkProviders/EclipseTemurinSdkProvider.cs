@@ -6,10 +6,10 @@ namespace JavaMan.SdkProviders
 {
     public class EclipseTemurinSdkProvider : ISdkProvider
     {
-        private readonly IDictionary<string, string> _urls = new ConcurrentDictionary<string, string>();
+        private readonly IDictionary<string, string> _urls;
         public EclipseTemurinSdkProvider()
         {
-            _urls = new ConcurrentDictionary<string, string>();
+            _urls = BuildUrls();
         }
         private IDictionary<string, string> BuildUrls()
         {

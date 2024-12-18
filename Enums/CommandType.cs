@@ -2,6 +2,7 @@ namespace JavaMan.Enums
 {
     public enum CommandType
     {
-        Install = 0
+        InstallJava = 1,
+        InstallGradle = 2
     }
 }

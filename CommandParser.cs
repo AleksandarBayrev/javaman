@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JavaMan.Enums;
 using JavaMan.Interfaces;
+using JavaMan.Types;
 
 namespace javaman
 {
@@ -16,12 +18,29 @@ namespace javaman
         {
             _commands.Add(commandType, commandHandler);
         }
-        public static async Task Execute(CommandType commandType, string[] args)
+        public static async Task<TaskResult> Execute(string[] args)
         {
-            _commands.TryGetValue(commandType, out ICommandHandler? handler);
-            if (handler != null)
+            try
             {
-                await handler.Execute(args);
+                await Console.Out.WriteLineAsync($"Getting handler {args[0]}");
+                _commands.TryGetValue(GetCommandType(args), out ICommandHandler? handler);
+                await Console.Out.WriteLineAsync($"Executing handler {args[0]}");
+                return await handler.Execute(args);
+            }
+            catch (Exception ex)
+            {
+                await Console.Out.WriteLineAsync($"Command {args[0]} not found!");
+                return new TaskResult($"Command {args[0]} not found!", StatusCodes.CommandNotFound);
+            }
+        }
+        private static CommandType GetCommandType(string[] args)
+        {
+            switch (args[0])
+            {
+                case "install":
+                    return CommandType.Install;
+                default:
+                    throw new Exception("Command not found!");
             }
         }
     }
