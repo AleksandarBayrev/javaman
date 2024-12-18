@@ -35,10 +35,11 @@ namespace javaman
         }
         private static CommandType GetCommandType(string[] args)
         {
-            switch (args[0])
+            var command = $"{args[0]} {args[1]}";
+            switch (command.Trim())
             {
-                case "install":
-                    return CommandType.Install;
+                case "install java":
+                    return CommandType.InstallJava;
                 default:
                     throw new Exception("Command not found!");
             }
