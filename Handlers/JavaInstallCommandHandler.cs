@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -25,6 +26,13 @@ namespace JavaMan.Handlers
                 {
                     await Console.Out.WriteLineAsync($"Starting downloading Java {version}");
                     var response = await client.GetByteArrayAsync(_sdkProvider.GetUrl(version));
+                    var currentDir = Directory.GetDirectoryRoot(Process.GetCurrentProcess().MainModule!.FileName);
+                    System.Console.WriteLine(currentDir);
+                    if (!Directory.Exists(currentDir))
+                    {
+                        Directory.CreateDirectory(Path.GetFullPath(currentDir));
+                        Directory.CreateDirectory(Path.GetFullPath(Path.Combine(currentDir, "sdks")));
+                    }
                     await File.WriteAllBytesAsync(Path.Combine(Directory.GetCurrentDirectory(), "sdks", $"java-{version}"), response);
                     return new TaskResult($"Successfully downloaded Java {version}!", StatusCodes.Success);
                 }

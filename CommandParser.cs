@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JavaMan.Enums;
 using JavaMan.Interfaces;
@@ -29,20 +30,28 @@ namespace javaman
             }
             catch (Exception ex)
             {
-                await Console.Out.WriteLineAsync($"Command {args[0]} not found!");
+                await Console.Out.WriteLineAsync($"Command {args[0]} not found! Ex: {ex.Message}");
                 return new TaskResult($"Command {args[0]} not found!", StatusCodes.CommandNotFound);
             }
         }
         private static CommandType GetCommandType(string[] args)
         {
-            var command = $"{args[0]} {args[1]}";
-            switch (command.Trim())
+            var command = $"{string.Join(' ', args)}".Trim();
+            if (command.Contains("install java"))
             {
-                case "install java":
-                    return CommandType.InstallJava;
-                default:
-                    throw new Exception("Command not found!");
+                return CommandType.InstallJava;
             }
+            if (command.Contains("help"))
+            {
+                return CommandType.Help;
+
+            }
+            if (command.Contains("list-candidates"))
+            {
+                return CommandType.ListCandidates;
+
+            }
+            throw new Exception("Command not found!");
         }
     }
 }
